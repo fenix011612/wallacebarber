@@ -145,11 +145,8 @@
 
     <div class="admin-area" id="adminArea">
       <h3>📋 Agendamentos do Dia</h3>
-
       <input type="date" id="filtroData">
-
       <div id="listaAgendamentos"></div>
-
       <button class="logout-btn" onclick="fecharAdmin()">Sair</button>
     </div>
 
@@ -160,7 +157,7 @@
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
     const firebaseConfig = {
-      apiKey: "SUA_API_KEY",
+      apiKey: "AIzaSyBwDFC8NwoGufS8d_PwpoUR4IYcv7ax1vo",
       authDomain: "wallacebarber-e3ff6.firebaseapp.com",
       databaseURL: "https://wallacebarber-e3ff6-default-rtdb.firebaseio.com",
       projectId: "wallacebarber-e3ff6",
@@ -173,7 +170,7 @@
     const database = getDatabase(app);
 
     const numeroBarbearia = "5521964768235";
-    const senhaCorreta = "7777";
+    const senhaCorreta = "1234";
 
     function isDiaValido(data) {
       const dia = new Date(data + "T00:00:00").getDay();
@@ -183,11 +180,11 @@
     document.getElementById("form").addEventListener("submit", async function(e) {
       e.preventDefault();
 
-      const nome = nome.value;
-      const telefone = telefone.value;
-      const data = data.value;
-      const horario = horario.value;
-      const servico = servico.value;
+      const nome = document.getElementById("nome").value;
+      const telefone = document.getElementById("telefone").value;
+      const data = document.getElementById("data").value;
+      const horario = document.getElementById("horario").value;
+      const servico = document.getElementById("servico").value;
 
       if (!isDiaValido(data)) {
         alert("Funcionamos apenas de terça a sábado!");
