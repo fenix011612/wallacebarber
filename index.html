@@ -13,7 +13,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .card {
@@ -21,7 +22,7 @@
       padding: 30px;
       border-radius: 12px;
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       color: white;
     }
 
@@ -60,6 +61,39 @@
     button:hover {
       background: #1ebe5d;
     }
+
+    .admin-btn {
+      background: #c59d5f;
+      margin-top: 10px;
+    }
+
+    .admin-btn:hover {
+      background: #b28745;
+    }
+
+    .admin-area {
+      margin-top: 30px;
+      display: none;
+    }
+
+    .agendamento {
+      background: #111;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border-left: 4px solid #c59d5f;
+      font-size: 14px;
+    }
+
+    .logout-btn {
+      background: #444;
+      margin-top: 10px;
+    }
+
+    .logout-btn:hover {
+      background: #333;
+    }
+
   </style>
 </head>
 <body>
@@ -106,15 +140,27 @@
 
       <button type="submit">Agendar no WhatsApp</button>
     </form>
+
+    <button class="admin-btn" onclick="abrirAdmin()">🔒 Área do Barbeiro</button>
+
+    <div class="admin-area" id="adminArea">
+      <h3>📋 Agendamentos do Dia</h3>
+
+      <input type="date" id="filtroData">
+
+      <div id="listaAgendamentos"></div>
+
+      <button class="logout-btn" onclick="fecharAdmin()">Sair</button>
+    </div>
+
   </div>
 
-  <!-- FIREBASE + SISTEMA -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyBwDFC8NwoGufS8d_PwpoUR4IYcv7ax1vo",
+      apiKey: "SUA_API_KEY",
       authDomain: "wallacebarber-e3ff6.firebaseapp.com",
       databaseURL: "https://wallacebarber-e3ff6-default-rtdb.firebaseio.com",
       projectId: "wallacebarber-e3ff6",
@@ -127,6 +173,7 @@
     const database = getDatabase(app);
 
     const numeroBarbearia = "5521964768235";
+    const senhaCorreta = "1234";
 
     function isDiaValido(data) {
       const dia = new Date(data + "T00:00:00").getDay();
@@ -136,11 +183,11 @@
     document.getElementById("form").addEventListener("submit", async function(e) {
       e.preventDefault();
 
-      const nome = document.getElementById("nome").value;
-      const telefone = document.getElementById("telefone").value;
-      const data = document.getElementById("data").value;
-      const horario = document.getElementById("horario").value;
-      const servico = document.getElementById("servico").value;
+      const nome = nome.value;
+      const telefone = telefone.value;
+      const data = data.value;
+      const horario = horario.value;
+      const servico = servico.value;
 
       if (!isDiaValido(data)) {
         alert("Funcionamos apenas de terça a sábado!");
@@ -179,8 +226,57 @@ Aguardo confirmação.`;
         console.error(error);
       }
     });
+
+    window.abrirAdmin = function() {
+      const senha = prompt("7777:");
+      if (senha === senhaCorreta) {
+        document.getElementById("adminArea").style.display = "block";
+      } else {
+        alert("Senha incorreta.");
+      }
+    }
+
+    window.fecharAdmin = function() {
+      document.getElementById("adminArea").style.display = "none";
+    }
+
+    const filtroData = document.getElementById("filtroData");
+    const lista = document.getElementById("listaAgendamentos");
+
+    filtroData.addEventListener("change", () => {
+      const dataSelecionada = filtroData.value;
+      const agRef = ref(database, "agendamentos");
+
+      onValue(agRef, (snapshot) => {
+        lista.innerHTML = "";
+        const dados = snapshot.val();
+        if (!dados) return;
+
+        const agendamentos = Object.entries(dados)
+          .map(([id, val]) => ({ id, ...val }))
+          .filter(a => a.data === dataSelecionada)
+          .sort((a, b) => a.horario.localeCompare(b.horario));
+
+        if (agendamentos.length === 0) {
+          lista.innerHTML = "<p>Nenhum agendamento nesse dia.</p>";
+          return;
+        }
+
+        agendamentos.forEach(a => {
+          lista.innerHTML += `
+            <div class="agendamento">
+              <strong>${a.horario}</strong> - ${a.nome}<br>
+              📞 ${a.telefone}<br>
+              ✂ ${a.servico}
+            </div>
+          `;
+        });
+      });
+    });
+
   </script>
 
 </body>
 </html>
+
 
