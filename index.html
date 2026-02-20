@@ -74,28 +74,28 @@
       <input type="date" id="data" required>
 
       <select id="horario" required>
-  <option value="">Selecione o horário</option>
-  <option>10:20</option>
-  <option>11:00</option>
-  <option>11:40</option>
-  <option>12:20</option>
-  <option>13:00</option>
-  <option>13:40</option>
-  <option>14:20</option>
-  <option>15:00</option>
-  <option>15:40</option>
-  <option>16:20</option>
-  <option>17:00</option>
-  <option>17:40</option>
-  <option>18:20</option>
-  <option>19:00</option>
-  <option>19:40</option>
-  <option>20:20</option>
-  <option>21:00</option>
-  <option>21:40</option>
-  <option>22:20</option>
-  <option>23:00</option>
-</select>
+        <option value="">Selecione o horário</option>
+        <option>10:20</option>
+        <option>11:00</option>
+        <option>11:40</option>
+        <option>12:20</option>
+        <option>13:00</option>
+        <option>13:40</option>
+        <option>14:20</option>
+        <option>15:00</option>
+        <option>15:40</option>
+        <option>16:20</option>
+        <option>17:00</option>
+        <option>17:40</option>
+        <option>18:20</option>
+        <option>19:00</option>
+        <option>19:40</option>
+        <option>20:20</option>
+        <option>21:00</option>
+        <option>21:40</option>
+        <option>22:20</option>
+        <option>23:00</option>
+      </select>
 
       <select id="servico" required>
         <option value="">Selecione o serviço</option>
@@ -108,15 +108,32 @@
     </form>
   </div>
 
-  <script>
-    const numeroBarbearia = "5521964768235"; // 🔥 COLOQUE SEU NÚMERO AQUI
+  <!-- FIREBASE + SISTEMA -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwDFC8NwoGufS8d_PwpoUR4IYcv7ax1vo",
+      authDomain: "wallacebarber-e3ff6.firebaseapp.com",
+      databaseURL: "https://wallacebarber-e3ff6-default-rtdb.firebaseio.com",
+      projectId: "wallacebarber-e3ff6",
+      storageBucket: "wallacebarber-e3ff6.appspot.com",
+      messagingSenderId: "958189269901",
+      appId: "1:958189269901:web:c89be159cfbb65b90703c4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    const numeroBarbearia = "5521964768235";
 
     function isDiaValido(data) {
       const dia = new Date(data + "T00:00:00").getDay();
-      return dia >= 2 && dia <= 6; // terça a sábado
+      return dia >= 2 && dia <= 6;
     }
 
-    document.getElementById("form").addEventListener("submit", function(e) {
+    document.getElementById("form").addEventListener("submit", async function(e) {
       e.preventDefault();
 
       const nome = document.getElementById("nome").value;
@@ -130,7 +147,17 @@
         return;
       }
 
-   const mensagem =
+      try {
+        await push(ref(database, "agendamentos"), {
+          nome,
+          telefone,
+          data,
+          horario,
+          servico,
+          criadoEm: new Date().toISOString()
+        });
+
+        const mensagem =
 `Olá, gostaria de agendar um horário.
 
 Nome: ${nome}
@@ -140,12 +167,20 @@ Horário: ${horario}
 Serviço: ${servico}
 
 Aguardo confirmação.`;
-      const url = `https://wa.me/${numeroBarbearia}?text=${encodeURIComponent(mensagem)}`;
-      window.open(url, "_blank");
+
+        const url = `https://wa.me/${numeroBarbearia}?text=${encodeURIComponent(mensagem)}`;
+        window.open(url, "_blank");
+
+        alert("Agendamento salvo com sucesso!");
+        document.getElementById("form").reset();
+
+      } catch (error) {
+        alert("Erro ao salvar no banco.");
+        console.error(error);
+      }
     });
   </script>
 
 </body>
-
 </html>
 
