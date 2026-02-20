@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Wallace Barber</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      color: white;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    p {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+    }
+
+    input, select {
+      background: #2c2c2c;
+      color: white;
+    }
+
+    button {
+      background: #25D366;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1ebe5d;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>💈 Wallace Barber</h1>
+    <p>Agende seu horário</p>
+
+    <form id="form">
+      <input type="text" id="nome" placeholder="Seu nome" required>
+      <input type="text" id="telefone" placeholder="Telefone" required>
+      <input type="date" id="data" required>
+
+      <select id="horario" required>
+        <option value="">Selecione o horário</option>
+        <option>10:00</option>
+        <option>11:00</option>
+        <option>12:00</option>
+        <option>14:00</option>
+        <option>15:00</option>
+        <option>16:00</option>
+        <option>17:00</option>
+        <option>18:00</option>
+        <option>19:00</option>
+        <option>20:00</option>
+        <option>21:00</option>
+      </select>
+
+      <select id="servico" required>
+        <option value="">Selecione o serviço</option>
+        <option>Corte</option>
+        <option>Barba</option>
+        <option>Corte + Barba</option>
+      </select>
+
+      <button type="submit">Agendar no WhatsApp</button>
+    </form>
+  </div>
+
+  <script>
+    const numeroBarbearia = "5521964768235"; // 🔥 COLOQUE SEU NÚMERO AQUI
+
+    function isDiaValido(data) {
+      const dia = new Date(data + "T00:00:00").getDay();
+      return dia >= 2 && dia <= 6; // terça a sábado
+    }
+
+    document.getElementById("form").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const nome = document.getElementById("nome").value;
+      const telefone = document.getElementById("telefone").value;
+      const data = document.getElementById("data").value;
+      const horario = document.getElementById("horario").value;
+      const servico = document.getElementById("servico").value;
+
+      if (!isDiaValido(data)) {
+        alert("Funcionamos apenas de terça a sábado!");
+        return;
+      }
+
+      const mensagem =
+`Olá! Quero agendar um horário:
+
+📌 Nome: ${nome}
+📱 Telefone: ${telefone}
+📅 Data: ${data}
+⏰ Horário: ${horario}
+💈 Serviço: ${servico}`;
+
+      const url = `https://wa.me/${numeroBarbearia}?text=${encodeURIComponent(mensagem)}`;
+      window.open(url, "_blank");
+    });
+  </script>
+
+</body>
+</html>
