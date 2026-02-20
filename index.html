@@ -130,15 +130,16 @@
         return;
       }
 
-      const mensagem =
-`Olá! Quero agendar um horário:
+   const mensagem =
+`Olá, gostaria de agendar um horário.
 
-📌 Nome: ${nome}
-📱 Telefone: ${telefone}
-📅 Data: ${data}
-⏰ Horário: ${horario}
-💈 Serviço: ${servico}`;
+Nome: ${nome}
+Telefone: ${telefone}
+Data: ${data}
+Horário: ${horario}
+Serviço: ${servico}
 
+Aguardo confirmação.`;
       const url = `https://wa.me/${numeroBarbearia}?text=${encodeURIComponent(mensagem)}`;
       window.open(url, "_blank");
     });
@@ -147,3 +148,4 @@
 </body>
 
 </html>
+
