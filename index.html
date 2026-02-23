@@ -1,115 +1,94 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Wallace Barber</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Wallace Barber</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
 
-    .card {
-      background: #1e1e1e;
-      padding: 30px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 420px;
-      color: white;
-    }
+.card {
+  background: #1e1e1e;
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  color: white;
+}
 
-    h1 { text-align: center; margin-bottom: 10px; }
-    p { text-align: center; color: #aaa; margin-bottom: 20px; }
+h1 { text-align: center; }
+p { text-align: center; color: #aaa; }
 
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      border-radius: 6px;
-      border: none;
-      font-size: 14px;
-    }
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+}
 
-    input, select { background: #2c2c2c; color: white; }
+input, select {
+  background: #2c2c2c;
+  color: white;
+}
 
-    button {
-      background: #25D366;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
+button {
+  background: #25D366;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    button:hover { background: #1ebe5d; }
+button:hover { background: #1ebe5d; }
 
-    .admin-btn { background: #c59d5f; margin-top: 10px; }
-    .admin-btn:hover { background: #b28745; }
-
-    .admin-area { margin-top: 30px; display: none; }
-
-    .agendamento {
-      background: #111;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      border-left: 4px solid #c59d5f;
-      font-size: 14px;
-    }
-
-    .logout-btn { background: #444; margin-top: 10px; }
-    .logout-btn:hover { background: #333; }
-
-  </style>
+.indisponivel {
+  color: #ff4d4d;
+}
+</style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>💈 Wallace Barber</h1>
-    <p>Agende seu horário</p>
+<div class="card">
+  <h1>💈 Wallace Barber</h1>
+  <p>Agende seu horário</p>
 
-    <form id="form">
-      <input type="text" id="nome" placeholder="Seu nome" required>
-      <input type="text" id="telefone" placeholder="Telefone" required>
-      <input type="date" id="data" required>
+  <form id="form">
+    <input type="text" id="nome" placeholder="Seu nome" required>
+    <input type="text" id="telefone" placeholder="Telefone" required>
+    <input type="date" id="data" required>
 
-      <select id="horario" required>
-        <option value="">Selecione o horário</option>
-      </select>
+    <select id="horario" required>
+      <option value="">Selecione o horário</option>
+    </select>
 
-      <select id="servico" required>
-        <option value="">Selecione o serviço</option>
-        <option>Corte</option>
-        <option>Barba</option>
-        <option>Corte + Barba</option>
-      </select>
+    <select id="servico" required>
+      <option value="">Selecione o serviço</option>
+      <option>Corte</option>
+      <option>Barba</option>
+      <option>Corte + Barba</option>
+    </select>
 
-      <button type="submit">Agendar no WhatsApp</button>
-    </form>
-
-    <button class="admin-btn" onclick="abrirAdmin()">🔒 Área do Barbeiro</button>
-
-    <div class="admin-area" id="adminArea">
-      <h3>📋 Agendamentos do Dia</h3>
-      <input type="date" id="filtroData">
-      <div id="listaAgendamentos"></div>
-      <button class="logout-btn" onclick="fecharAdmin()">Sair</button>
-    </div>
-
-  </div>
+    <button type="submit">Agendar no WhatsApp</button>
+  </form>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBwDFC8NwoGufS8d_PwpoUR4IYcv7ax1vo",
+  apiKey: "SUA_KEY",
   authDomain: "wallacebarber-e3ff6.firebaseapp.com",
   databaseURL: "https://wallacebarber-e3ff6-default-rtdb.firebaseio.com",
   projectId: "wallacebarber-e3ff6",
@@ -122,52 +101,55 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 const numeroBarbearia = "5521964768235";
-const senhaCorreta = "7777";
 
 const horariosFixos = [
-"10:20","11:00","11:40","12:20","13:00","13:40","14:20",
-"15:00","15:40","16:20","17:00","17:40","18:20",
-"19:00","19:40","20:20","21:00","21:40","22:20","23:00"
+"10:20","11:00","11:40","12:20","13:00","13:40",
+"14:20","15:00","15:40","16:20","17:00","17:40",
+"18:20","19:00","19:40","20:20","21:00","21:40",
+"22:20","23:00"
 ];
-
-function isDiaValido(data) {
-  const dia = new Date(data + "T00:00:00").getDay();
-  return dia >= 2 && dia <= 6;
-}
 
 const selectHorario = document.getElementById("horario");
 const inputData = document.getElementById("data");
 
-/* 🔥 BLOQUEAR HORÁRIOS JÁ MARCADOS */
-inputData.addEventListener("change", async () => {
-  const dataSelecionada = inputData.value;
-  if (!dataSelecionada) return;
-
-  const snapshot = await get(ref(database, "agendamentos"));
-  const dados = snapshot.val();
-
-  let horariosOcupados = [];
-
-  if (dados) {
-    horariosOcupados = Object.values(dados)
-      .filter(a => a.data === dataSelecionada)
-      .map(a => a.horario);
-  }
-
+function carregarHorarios(dataSelecionada) {
   selectHorario.innerHTML = '<option value="">Selecione o horário</option>';
 
-  horariosFixos.forEach(horario => {
-    if (!horariosOcupados.includes(horario)) {
+  if (!dataSelecionada) return;
+
+  const agRef = ref(database, "agendamentos");
+
+  onValue(agRef, (snapshot) => {
+    const dados = snapshot.val();
+    let horariosOcupados = [];
+
+    if (dados) {
+      Object.values(dados).forEach(a => {
+        if (a.data === dataSelecionada) {
+          horariosOcupados.push(a.horario);
+        }
+      });
+    }
+
+    horariosFixos.forEach(horario => {
       const option = document.createElement("option");
       option.value = horario;
-      option.textContent = horario;
-      selectHorario.appendChild(option);
-    }
-  });
 
-  if (horariosOcupados.length === horariosFixos.length) {
-    alert("Todos os horários desse dia já estão preenchidos.");
-  }
+      if (horariosOcupados.includes(horario)) {
+        option.textContent = horario + " - Indisponível";
+        option.disabled = true;
+        option.classList.add("indisponivel");
+      } else {
+        option.textContent = horario;
+      }
+
+      selectHorario.appendChild(option);
+    });
+  }, { onlyOnce: true });
+}
+
+inputData.addEventListener("change", () => {
+  carregarHorarios(inputData.value);
 });
 
 document.getElementById("form").addEventListener("submit", async function(e) {
@@ -175,54 +157,45 @@ document.getElementById("form").addEventListener("submit", async function(e) {
 
   const nome = document.getElementById("nome").value;
   const telefone = document.getElementById("telefone").value;
-  const data = document.getElementById("data").value;
-  const horario = document.getElementById("horario").value;
+  const data = inputData.value;
+  const horario = selectHorario.value;
   const servico = document.getElementById("servico").value;
 
-  if (!isDiaValido(data)) {
-    alert("Funcionamos apenas de terça a sábado!");
-    return;
-  }
+  try {
+    await push(ref(database, "agendamentos"), {
+      nome,
+      telefone,
+      data,
+      horario,
+      servico,
+      criadoEm: new Date().toISOString()
+    });
 
-  await push(ref(database, "agendamentos"), {
-    nome, telefone, data, horario, servico,
-    criadoEm: new Date().toISOString()
-  });
-
-  const mensagem =
+    const mensagem =
 `Olá, gostaria de agendar um horário.
 
 Nome: ${nome}
 Telefone: ${telefone}
 Data: ${data}
 Horário: ${horario}
-Serviço: ${servico}
+Serviço: ${servico}`;
 
-Aguardo confirmação.`;
+    const url = `https://wa.me/${numeroBarbearia}?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, "_blank");
 
-  const url = `https://wa.me/${numeroBarbearia}?text=${encodeURIComponent(mensagem)}`;
-  window.open(url, "_blank");
+    alert("Agendamento realizado com sucesso!");
+    document.getElementById("form").reset();
+    selectHorario.innerHTML = '<option value="">Selecione o horário</option>';
 
-  alert("Agendamento salvo com sucesso!");
-  document.getElementById("form").reset();
-});
-
-/* 🔐 ADMIN */
-window.abrirAdmin = function() {
-  const senha = prompt("Digite a senha do barbeiro:");
-  if (senha === senhaCorreta) {
-    document.getElementById("adminArea").style.display = "block";
-  } else {
-    alert("Senha incorreta.");
+  } catch (error) {
+    alert("Erro ao salvar.");
+    console.error(error);
   }
-}
-
-window.fecharAdmin = function() {
-  document.getElementById("adminArea").style.display = "none";
-}
-
+});
 </script>
+
 </body>
 </html>
+
 
 
