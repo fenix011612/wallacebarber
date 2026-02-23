@@ -52,6 +52,34 @@ button {
 
 button:hover { background: #1ebe5d; }
 
+.admin-btn {
+  background: #c59d5f;
+  margin-top: 10px;
+}
+
+.admin-btn:hover { background: #b28745; }
+
+.logout-btn {
+  background: #444;
+  margin-top: 10px;
+}
+
+.logout-btn:hover { background: #333; }
+
+.admin-area {
+  margin-top: 30px;
+  display: none;
+}
+
+.agendamento {
+  background: #111;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border-left: 4px solid #c59d5f;
+  font-size: 14px;
+}
+
 .indisponivel {
   color: #ff4d4d;
 }
@@ -81,6 +109,16 @@ button:hover { background: #1ebe5d; }
 
     <button type="submit">Agendar no WhatsApp</button>
   </form>
+
+  <button class="admin-btn" onclick="abrirAdmin()">🔒 Área do Barbeiro</button>
+
+  <div class="admin-area" id="adminArea">
+    <h3>📋 Agendamentos do Dia</h3>
+    <input type="date" id="filtroData">
+    <div id="listaAgendamentos"></div>
+    <button class="logout-btn" onclick="fecharAdmin()">Sair</button>
+  </div>
+
 </div>
 
 <script type="module">
@@ -88,7 +126,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "SUA_KEY",
+  apiKey: "SUA_API_KEY_AQUI",
   authDomain: "wallacebarber-e3ff6.firebaseapp.com",
   databaseURL: "https://wallacebarber-e3ff6-default-rtdb.firebaseio.com",
   projectId: "wallacebarber-e3ff6",
@@ -101,6 +139,7 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 const numeroBarbearia = "5521964768235";
+const senhaCorreta = "7777";
 
 const horariosFixos = [
 "10:20","11:00","11:40","12:20","13:00","13:40",
@@ -112,39 +151,44 @@ const horariosFixos = [
 const selectHorario = document.getElementById("horario");
 const inputData = document.getElementById("data");
 
+function isDiaValido(data) {
+  const dia = new Date(data + "T00:00:00").getDay();
+  return dia >= 2 && dia <= 6;
+}
+
 function carregarHorarios(dataSelecionada) {
   selectHorario.innerHTML = '<option value="">Selecione o horário</option>';
-
   if (!dataSelecionada) return;
 
   const agRef = ref(database, "agendamentos");
 
   onValue(agRef, (snapshot) => {
     const dados = snapshot.val();
-    let horariosOcupados = [];
+    let ocupados = [];
 
     if (dados) {
       Object.values(dados).forEach(a => {
         if (a.data === dataSelecionada) {
-          horariosOcupados.push(a.horario);
+          ocupados.push(a.horario);
         }
       });
     }
 
-    horariosFixos.forEach(horario => {
+    horariosFixos.forEach(h => {
       const option = document.createElement("option");
-      option.value = horario;
+      option.value = h;
 
-      if (horariosOcupados.includes(horario)) {
-        option.textContent = horario + " - Indisponível";
+      if (ocupados.includes(h)) {
+        option.textContent = h + " - Indisponível";
         option.disabled = true;
         option.classList.add("indisponivel");
       } else {
-        option.textContent = horario;
+        option.textContent = h;
       }
 
       selectHorario.appendChild(option);
     });
+
   }, { onlyOnce: true });
 }
 
@@ -160,6 +204,11 @@ document.getElementById("form").addEventListener("submit", async function(e) {
   const data = inputData.value;
   const horario = selectHorario.value;
   const servico = document.getElementById("servico").value;
+
+  if (!isDiaValido(data)) {
+    alert("Funcionamos apenas de terça a sábado!");
+    return;
+  }
 
   try {
     await push(ref(database, "agendamentos"), {
@@ -178,24 +227,75 @@ Nome: ${nome}
 Telefone: ${telefone}
 Data: ${data}
 Horário: ${horario}
-Serviço: ${servico}`;
+Serviço: ${servico}
+
+Aguardo confirmação.`;
 
     const url = `https://wa.me/${numeroBarbearia}?text=${encodeURIComponent(mensagem)}`;
     window.open(url, "_blank");
 
-    alert("Agendamento realizado com sucesso!");
+    alert("Agendamento salvo com sucesso!");
     document.getElementById("form").reset();
     selectHorario.innerHTML = '<option value="">Selecione o horário</option>';
 
   } catch (error) {
-    alert("Erro ao salvar.");
+    alert("Erro ao salvar no banco.");
     console.error(error);
   }
+});
+
+/* ===== ADMIN ===== */
+
+window.abrirAdmin = function() {
+  const senha = prompt("Digite a senha do barbeiro:");
+  if (senha === senhaCorreta) {
+    document.getElementById("adminArea").style.display = "block";
+  } else {
+    alert("Senha incorreta.");
+  }
+}
+
+window.fecharAdmin = function() {
+  document.getElementById("adminArea").style.display = "none";
+}
+
+const filtroData = document.getElementById("filtroData");
+const lista = document.getElementById("listaAgendamentos");
+
+filtroData.addEventListener("change", () => {
+  const dataSelecionada = filtroData.value;
+  const agRef = ref(database, "agendamentos");
+
+  onValue(agRef, (snapshot) => {
+    lista.innerHTML = "";
+    const dados = snapshot.val();
+    if (!dados) return;
+
+    const agendamentos = Object.values(dados)
+      .filter(a => a.data === dataSelecionada)
+      .sort((a, b) => a.horario.localeCompare(b.horario));
+
+    if (agendamentos.length === 0) {
+      lista.innerHTML = "<p>Nenhum agendamento nesse dia.</p>";
+      return;
+    }
+
+    agendamentos.forEach(a => {
+      lista.innerHTML += `
+        <div class="agendamento">
+          <strong>${a.horario}</strong> - ${a.nome}<br>
+          📞 ${a.telefone}<br>
+          ✂ ${a.servico}
+        </div>
+      `;
+    });
+  });
 });
 </script>
 
 </body>
 </html>
+
 
 
 
