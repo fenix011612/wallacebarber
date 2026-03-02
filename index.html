@@ -148,6 +148,8 @@ const horariosFixos = [
 "22:20","23:00"
 ];
 
+const horariosBloqueados = ["13:40", "14:20"]; // horários sempre indisponíveis
+
 const selectHorario = document.getElementById("horario");
 const inputData = document.getElementById("data");
 
@@ -178,7 +180,7 @@ function carregarHorarios(dataSelecionada) {
       const option = document.createElement("option");
       option.value = h;
 
-      if (ocupados.includes(h)) {
+      if (ocupados.includes(h) || horariosBloqueados.includes(h)) {
         option.textContent = h + " - Indisponível";
         option.disabled = true;
         option.classList.add("indisponivel");
@@ -271,31 +273,40 @@ filtroData.addEventListener("change", () => {
     const dados = snapshot.val();
     if (!dados) return;
 
-    const agendamentos = Object.values(dados)
-      .filter(a => a.data === dataSelecionada)
-      .sort((a, b) => a.horario.localeCompare(b.horario));
+    const agendamentos = Object.entries(dados)
+      .filter(([key, a]) => a.data === dataSelecionada)
+      .sort((a, b) => a[1].horario.localeCompare(b[1].horario));
 
     if (agendamentos.length === 0) {
       lista.innerHTML = "<p>Nenhum agendamento nesse dia.</p>";
       return;
     }
 
-    agendamentos.forEach(a => {
+    agendamentos.forEach(([key, a]) => {
       lista.innerHTML += `
-        <div class="agendamento">
+        <div class="agendamento" id="ag-${key}">
           <strong>${a.horario}</strong> - ${a.nome}<br>
           📞 ${a.telefone}<br>
-          ✂ ${a.servico}
+          ✂ ${a.servico}<br>
+          <button onclick="deletarAgendamento('${key}')" style="margin-top:5px;background:#ff4d4d;color:white;border:none;padding:5px 8px;border-radius:4px;cursor:pointer;">Apagar</button>
         </div>
       `;
     });
   });
 });
+
+window.deletarAgendamento = async function(key) {
+  if (!confirm("Deseja realmente apagar este agendamento?")) return;
+  try {
+    await ref(database, "agendamentos/" + key).remove();
+    document.getElementById("ag-" + key).remove();
+    alert("Agendamento apagado com sucesso!");
+  } catch (err) {
+    alert("Erro ao apagar agendamento.");
+    console.error(err);
+  }
+};
 </script>
 
 </body>
 </html>
-
-
-
-
