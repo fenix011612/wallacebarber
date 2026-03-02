@@ -123,7 +123,7 @@ button:hover { background: #1ebe5d; }
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "SUA_API_KEY_AQUI",
@@ -298,8 +298,9 @@ filtroData.addEventListener("change", () => {
 window.deletarAgendamento = async function(key) {
   if (!confirm("Deseja realmente apagar este agendamento?")) return;
   try {
-    await ref(database, "agendamentos/" + key).remove();
-    document.getElementById("ag-" + key).remove();
+    await remove(ref(database, "agendamentos/" + key));
+    const elem = document.getElementById("ag-" + key);
+    if (elem) elem.remove();
     alert("Agendamento apagado com sucesso!");
   } catch (err) {
     alert("Erro ao apagar agendamento.");
