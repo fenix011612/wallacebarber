@@ -1,313 +1,610 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Wallace Barber</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+<title>Sabrina Bronze | Agendamento</title>
 
 <style>
-body {
+:root {
+  --preto: #080808;
+  --painel: #141414;
+  --dourado: #d6b35c;
+  --dourado-claro: #f4df9b;
+  --branco: #f7f4ec;
+  --cinza: #b9b4a8;
+  --borda: rgba(214,179,92,.3);
+}
+
+* {
+  box-sizing: border-box;
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #111;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--preto);
+  color: var(--branco);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+a { color: inherit; }
+
+.container {
+  width: min(1100px, 92%);
+  margin: auto;
+}
+
+header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  min-height: 100vh;
-  padding: 20px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--borda);
 }
 
-.card {
-  background: #1e1e1e;
-  padding: 30px;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 420px;
-  color: white;
-}
-
-h1 { text-align: center; }
-p { text-align: center; color: #aaa; }
-
-input, select, button {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border-radius: 6px;
-  border: none;
-  font-size: 14px;
-}
-
-input, select {
-  background: #2c2c2c;
-  color: white;
-}
-
-button {
-  background: #25D366;
-  color: white;
+.logo {
+  color: var(--dourado-claro);
   font-weight: bold;
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  text-decoration: none;
+}
+
+.logo small {
+  display: block;
+  color: var(--cinza);
+  font-size: .62rem;
+  letter-spacing: 2px;
+  font-weight: normal;
+}
+
+nav {
+  display: flex;
+  gap: 18px;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--cinza);
+  font-size: .9rem;
+}
+
+nav a:hover { color: var(--dourado); }
+
+.hero {
+  padding: 75px 0;
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 35px;
+  align-items: center;
+}
+
+.eyebrow {
+  color: var(--dourado);
+  font-size: .76rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  line-height: 1.05;
+  margin: 18px 0;
+}
+
+h1 span { color: var(--dourado); }
+
+.description {
+  color: var(--cinza);
+  max-width: 500px;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+
+.btn {
+  display: inline-block;
+  background: var(--dourado);
+  color: #080808;
+  padding: 12px 18px;
+  border: 1px solid var(--dourado);
+  border-radius: 3px;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
   cursor: pointer;
+  font-size: .9rem;
 }
 
-button:hover { background: #1ebe5d; }
+.btn:hover { background: var(--dourado-claro); }
 
-.admin-btn {
-  background: #c59d5f;
-  margin-top: 10px;
+.btn-outline {
+  background: transparent;
+  color: var(--dourado-claro);
 }
 
-.admin-btn:hover { background: #b28745; }
-
-.logout-btn {
-  background: #444;
-  margin-top: 10px;
+.hero-art {
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--borda);
+  background: radial-gradient(ellipse, #382b15, #111 65%, #080808);
 }
 
-.logout-btn:hover { background: #333; }
-
-.admin-area {
-  margin-top: 30px;
-  display: none;
+.sun {
+  width: 175px;
+  height: 175px;
+  border: 1px solid var(--dourado);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--dourado-claro);
+  font-size: 2.5rem;
+  letter-spacing: 5px;
+  box-shadow: 0 0 50px #d6b35c20;
 }
 
-.agendamento {
-  background: #111;
+section { padding: 45px 0; }
+
+.section-title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.section-title h2 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin: 8px 0;
+}
+
+.section-title p {
+  color: var(--cinza);
+}
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.service {
+  background: var(--painel);
+  border: 1px solid var(--borda);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+}
+
+.service .tag {
+  color: var(--dourado);
+  font-size: .72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.service h3 {
+  margin: 10px 0;
+  font-size: 1.25rem;
+}
+
+.service p {
+  color: var(--cinza);
+  font-size: .92rem;
+  flex: 1;
+  margin-bottom: 15px;
+}
+
+.price {
+  color: var(--dourado-claro);
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.price small {
+  color: var(--cinza);
+  font-size: .8rem;
+  font-weight: normal;
+}
+
+.service .btn { width: 100%; }
+
+.booking {
+  display: grid;
+  grid-template-columns: .8fr 1.2fr;
+  gap: 35px;
+  align-items: start;
+}
+
+.booking-info h2 {
+  font-size: 2.2rem;
+  line-height: 1.15;
+  margin: 12px 0;
+}
+
+.booking-info p {
+  color: var(--cinza);
+  margin: 15px 0;
+}
+
+.socials {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.socials a {
+  color: var(--dourado-claro);
+  text-decoration: none;
+  border: 1px solid var(--borda);
+  padding: 10px 13px;
+  border-radius: 3px;
+}
+
+form {
+  background: var(--painel);
+  border: 1px solid var(--borda);
+  padding: 24px;
+  display: grid;
+  gap: 15px;
+  border-radius: 4px;
+}
+
+label {
+  color: var(--dourado-claro);
+  font-size: .9rem;
+  display: grid;
+  gap: 6px;
+}
+
+input, select, textarea {
+  width: 100%;
   padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  border-left: 4px solid #c59d5f;
-  font-size: 14px;
+  background: #090909;
+  color: var(--branco);
+  border: 1px solid #39342a;
+  border-radius: 3px;
+  font: inherit;
 }
 
-.indisponivel {
-  color: #ff4d4d;
+input:focus, select:focus, textarea:focus {
+  outline: 1px solid var(--dourado);
+}
+
+textarea { resize: vertical; }
+
+.notice {
+  font-size: .78rem;
+  color: var(--cinza);
+}
+
+footer {
+  margin-top: 40px;
+  padding: 25px 0;
+  border-top: 1px solid var(--borda);
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+  color: var(--cinza);
+  font-size: .82rem;
+}
+
+@media (max-width: 700px) {
+  header { gap: 10px; }
+  .logo { font-size: .85rem; }
+  nav { gap: 10px; }
+  nav a { font-size: .8rem; }
+  .hero { grid-template-columns: 1fr; padding: 45px 0; }
+  .hero-art { min-height: 230px; }
+  .sun { width: 145px; height: 145px; }
+  .services, .booking { grid-template-columns: 1fr; }
+  .booking-info h2 { font-size: 1.9rem; }
 }
 </style>
 </head>
+
 <body>
+<div class="container">
 
-<div class="card">
-  <h1>💈 Wallace Barber</h1>
-  <p>Agende seu horário</p>
+<header>
+  <a href="#" class="logo">
+    SABRINA BRONZE
+    <small>BELEZA • BRILHO • AUTOCUIDADO</small>
+  </a>
 
-  <form id="form">
-    <input type="text" id="nome" placeholder="Seu nome" required>
-    <input type="text" id="telefone" placeholder="Telefone" required>
-    <input type="date" id="data" required>
+  <nav>
+    <a href="#servicos">Serviços</a>
+    <a href="#agendar">Agendar</a>
+  </nav>
+</header>
 
-    <select id="horario" required>
-      <option value="">Selecione o horário</option>
-    </select>
+<main>
 
-    <select id="servico" required>
-      <option value="">Selecione o serviço</option>
-      <option>Corte</option>
-      <option>Barba</option>
-      <option>Corte + Barba</option>
-    </select>
+<section class="hero">
+  <div>
+    <div class="eyebrow">Seu momento de brilhar</div>
 
-    <button type="submit">Agendar no WhatsApp</button>
-  </form>
+    <h1>
+      Seu bronze.<br>
+      <span>Sua melhor versão.</span>
+    </h1>
 
-  <button class="admin-btn" onclick="abrirAdmin()">🔒 Área do Barbeiro</button>
+    <p class="description">
+      Realce sua beleza com um bronze pensado para você.
+      Escolha seu serviço e solicite seu agendamento
+      diretamente pelo WhatsApp.
+    </p>
 
-  <div class="admin-area" id="adminArea">
-    <h3>📋 Agendamentos do Dia</h3>
-    <input type="date" id="filtroData">
-    <div id="listaAgendamentos"></div>
-    <button class="logout-btn" onclick="fecharAdmin()">Sair</button>
+    <div class="buttons">
+      <a href="#agendar" class="btn">Agendar meu horário</a>
+      <a href="#servicos" class="btn btn-outline">Ver serviços</a>
+    </div>
   </div>
+
+  <div class="hero-art">
+    <div class="sun">SB</div>
+  </div>
+</section>
+
+<section id="servicos">
+  <div class="section-title">
+    <div class="eyebrow">Escolha seu bronze</div>
+    <h2>Nossos serviços</h2>
+    <p>Encontre a opção ideal para você.</p>
+  </div>
+
+  <div class="services">
+
+    <article class="service">
+      <div class="tag">01 · Efeito iluminado</div>
+      <h3>Premium Máquina + LED</h3>
+      <p>
+        Produto neon com máquina dupla e intensificação
+        por LED.
+      </p>
+      <div class="price">R$ 50 <small>· 1h20</small></div>
+      <button class="btn" type="button"
+        onclick="escolherServico('Premium máquina + intensificação LED — R$ 50')">
+        Escolher serviço
+      </button>
+    </article>
+
+    <article class="service">
+      <div class="tag">02 · Neon intenso</div>
+      <h3>Premium Neon + LED</h3>
+      <p>
+        Bronze neon com máquina e intensificação por LED.
+      </p>
+      <div class="price">R$ 60 <small>· 2 horas</small></div>
+      <button class="btn" type="button"
+        onclick="escolherServico('Premium Neon + intensificação — R$ 60')">
+        Escolher serviço
+      </button>
+    </article>
+
+    <article class="service">
+      <div class="tag">03 · Ao ar livre</div>
+      <h3>Bronze Natural</h3>
+      <p>
+        Até 2 horas, em pé, deitada ou sentada, com opção
+        de biquíni de fita ou tecido natural personalizado.
+      </p>
+      <div class="price">R$ 50 <small>· Até 2 horas</small></div>
+      <button class="btn" type="button"
+        onclick="escolherServico('Bronze natural — R$ 50')">
+        Escolher serviço
+      </button>
+    </article>
+
+    <article class="service">
+      <div class="tag">04 · Clássico</div>
+      <h3>Clássico Máquina Dupla</h3>
+      <p>
+        Procedimento com ativação, fixação, parafina
+        e cuidados pós-bronze.
+      </p>
+      <div class="price">R$ 40 <small>· 1 hora</small></div>
+      <button class="btn" type="button"
+        onclick="escolherServico('Clássico máquina dupla — R$ 40')">
+        Escolher serviço
+      </button>
+    </article>
+
+  </div>
+</section>
+
+<section id="agendar">
+  <div class="booking">
+
+    <div class="booking-info">
+      <div class="eyebrow">Vamos marcar?</div>
+      <h2>Seu próximo bronze começa aqui.</h2>
+
+      <p>
+        Preencha seus dados, escolha o serviço e envie
+        sua solicitação diretamente para o nosso WhatsApp.
+      </p>
+
+      <div class="socials">
+        <a
+          href="https://www.instagram.com/sabrina_bronzee?igsh=MTRhendrZnZhYzBpNw%3D%3D&utm_source=qr"
+          target="_blank"
+          rel="noopener noreferrer">
+          ◎ Instagram
+        </a>
+
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=R.%20Ayrton%20Senna%2C%202%20-%20S%C3%A3o%20Bento%2C%20Duque%20de%20Caxias%20-%20RJ%2C%2025045-332"
+          target="_blank"
+          rel="noopener noreferrer">
+          ⌖ Como chegar
+        </a>
+      </div>
+
+      <p>
+        <strong style="color:var(--dourado-claro)">
+          Endereço
+        </strong><br>
+        R. Ayrton Senna, 2 - São Bento,
+        Duque de Caxias - RJ, 25045-332
+      </p>
+    </div>
+
+    <form id="formAgendamento">
+
+      <label for="nome">
+        Seu nome
+        <input id="nome" name="nome"
+          autocomplete="name"
+          required
+          placeholder="Como podemos te chamar?">
+      </label>
+
+      <label for="telefone">
+        Seu WhatsApp
+        <input id="telefone" name="telefone"
+          type="tel"
+          inputmode="tel"
+          required
+          placeholder="(21) 99999-9999">
+      </label>
+
+      <label for="servico">
+        Serviço desejado
+        <select id="servico" name="servico" required>
+          <option value="">Selecione um serviço</option>
+          <option>Premium máquina + intensificação LED — R$ 50</option>
+          <option>Premium Neon + intensificação — R$ 60</option>
+          <option>Bronze natural — R$ 50</option>
+          <option>Clássico máquina dupla — R$ 40</option>
+        </select>
+      </label>
+
+      <label for="data">
+        Data desejada
+        <input id="data" name="data" type="date" required>
+      </label>
+
+      <label for="horario">
+        Preferência de horário
+        <select id="horario" name="horario" required>
+          <option value="">Selecione</option>
+          <option>Manhã</option>
+          <option>Início da tarde</option>
+          <option>Fim da tarde</option>
+          <option>Tenho flexibilidade</option>
+        </select>
+      </label>
+
+      <label for="observacoes">
+        Observações (opcional)
+        <textarea id="observacoes" name="observacoes"
+          rows="3"
+          placeholder="Alguma informação importante?"></textarea>
+      </label>
+
+      <button type="submit" class="btn">
+        Solicitar pelo WhatsApp
+      </button>
+
+      <p class="notice">
+        Seu WhatsApp será aberto com a mensagem preenchida.
+        O agendamento só será enviado quando você tocar em
+        Enviar no WhatsApp. O horário depende da confirmação
+        do studio.
+      </p>
+
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>© <span id="2026"></span> Sabrina Bronze</span>
+</footer>
 
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+<script>
+// WHATSAPP OFICIAL DO STUDIO
+const WHATSAPP_STUDIO = "5521979982511";
 
-const firebaseConfig = {
-  apiKey: "SUA_API_KEY_AQUI",
-  authDomain: "wallacebarber-e3ff6.firebaseapp.com",
-  databaseURL: "https://wallacebarber-e3ff6-default-rtdb.firebaseio.com",
-  projectId: "wallacebarber-e3ff6",
-  storageBucket: "wallacebarber-e3ff6.appspot.com",
-  messagingSenderId: "958189269901",
-  appId: "1:958189269901:web:c89be159cfbb65b90703c4"
-};
+// LINK OFICIAL DO INSTAGRAM
+const INSTAGRAM =
+  "https://www.instagram.com/sabrina_bronzee?igsh=MTRhendrZnZhYzBpNw%3D%3D&utm_source=qr";
 
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+// LOCALIZAÇÃO DO STUDIO
+const LOCALIZACAO =
+  "https://www.google.com/maps/search/?api=1&query=R.%20Ayrton%20Senna%2C%202%20-%20S%C3%A3o%20Bento%2C%20Duque%20de%20Caxias%20-%20RJ%2C%2025045-332";
 
-const numeroBarbearia = "5521964768235";
-const senhaCorreta = "7777";
+document.getElementById("ano").textContent =
+  new Date().getFullYear();
 
-const horariosFixos = [
-"10:20","11:00","11:40","12:20","13:00","13:40",
-"14:20","15:00","15:40","16:20","17:00","17:40",
-"18:20","19:00","19:40","20:20","21:00","21:40",
-"22:20","23:00"
-];
+// Impede a seleção de datas anteriores a hoje.
+const campoData = document.getElementById("data");
+const hoje = new Date();
 
-const horariosBloqueados = ["13:40", "14:20"]; // horários sempre indisponíveis
+campoData.min = new Date(
+  hoje.getTime() - hoje.getTimezoneOffset() * 60000
+).toISOString().split("T")[0];
 
-const selectHorario = document.getElementById("horario");
-const inputData = document.getElementById("data");
+// Ao clicar em um serviço, seleciona a opção no formulário.
+function escolherServico(servico) {
+  const select = document.getElementById("servico");
+  select.value = servico;
 
-function isDiaValido(data) {
-  const dia = new Date(data + "T00:00:00").getDay();
-  return dia >= 2 && dia <= 6;
+  document.getElementById("agendar").scrollIntoView({
+    behavior: "smooth"
+  });
 }
 
-function carregarHorarios(dataSelecionada) {
-  selectHorario.innerHTML = '<option value="">Selecione o horário</option>';
-  if (!dataSelecionada) return;
+// Monta a solicitação e abre o WhatsApp.
+document.getElementById("formAgendamento")
+  .addEventListener("submit", function(event) {
+    event.preventDefault();
 
-  const agRef = ref(database, "agendamentos");
+    const nome = document.getElementById("nome").value.trim();
+    const telefone = document.getElementById("telefone").value.trim();
+    const servico = document.getElementById("servico").value;
+    const data = document.getElementById("data").value;
+    const horario = document.getElementById("horario").value;
+    const observacoes =
+      document.getElementById("observacoes").value.trim() || "Nenhuma";
 
-  onValue(agRef, (snapshot) => {
-    const dados = snapshot.val();
-    let ocupados = [];
-
-    if (dados) {
-      Object.values(dados).forEach(a => {
-        if (a.data === dataSelecionada) {
-          ocupados.push(a.horario);
-        }
-      });
-    }
-
-    horariosFixos.forEach(h => {
-      const option = document.createElement("option");
-      option.value = h;
-
-      if (ocupados.includes(h) || horariosBloqueados.includes(h)) {
-        option.textContent = h + " - Indisponível";
-        option.disabled = true;
-        option.classList.add("indisponivel");
-      } else {
-        option.textContent = h;
-      }
-
-      selectHorario.appendChild(option);
-    });
-
-  }, { onlyOnce: true });
-}
-
-inputData.addEventListener("change", () => {
-  carregarHorarios(inputData.value);
-});
-
-document.getElementById("form").addEventListener("submit", async function(e) {
-  e.preventDefault();
-
-  const nome = document.getElementById("nome").value;
-  const telefone = document.getElementById("telefone").value;
-  const data = inputData.value;
-  const horario = selectHorario.value;
-  const servico = document.getElementById("servico").value;
-
-  if (!isDiaValido(data)) {
-    alert("Funcionamos apenas de terça a sábado!");
-    return;
-  }
-
-  try {
-    await push(ref(database, "agendamentos"), {
-      nome,
-      telefone,
-      data,
-      horario,
-      servico,
-      criadoEm: new Date().toISOString()
-    });
+    const dataFormatada = data.split("-").reverse().join("/");
 
     const mensagem =
-`Olá, gostaria de agendar um horário.
+`Olá, Sabrina Bronze! Gostaria de solicitar um agendamento.
 
-Nome: ${nome}
-Telefone: ${telefone}
-Data: ${data}
-Horário: ${horario}
-Serviço: ${servico}
+*Nome:* ${nome}
+*Meu WhatsApp:* ${telefone}
+*Serviço:* ${servico}
+*Data desejada:* ${dataFormatada}
+*Preferência de horário:* ${horario}
+*Observações:* ${observacoes}
 
-Aguardo confirmação.`;
+Aguardo a confirmação do horário. Obrigada!`;
 
-    const url = `https://wa.me/${numeroBarbearia}?text=${encodeURIComponent(mensagem)}`;
-    window.open(url, "_blank");
+    const link = "https://wa.me/" + WHATSAPP_STUDIO +
+      "?text=" + encodeURIComponent(mensagem);
 
-    alert("Agendamento salvo com sucesso!");
-    document.getElementById("form").reset();
-    selectHorario.innerHTML = '<option value="">Selecione o horário</option>';
-
-  } catch (error) {
-    alert("Erro ao salvar no banco.");
-    console.error(error);
-  }
-});
-
-/* ===== ADMIN ===== */
-
-window.abrirAdmin = function() {
-  const senha = prompt("Digite a senha do barbeiro:");
-  if (senha === senhaCorreta) {
-    document.getElementById("adminArea").style.display = "block";
-  } else {
-    alert("Senha incorreta.");
-  }
-}
-
-window.fecharAdmin = function() {
-  document.getElementById("adminArea").style.display = "none";
-}
-
-const filtroData = document.getElementById("filtroData");
-const lista = document.getElementById("listaAgendamentos");
-
-filtroData.addEventListener("change", () => {
-  const dataSelecionada = filtroData.value;
-  const agRef = ref(database, "agendamentos");
-
-  onValue(agRef, (snapshot) => {
-    lista.innerHTML = "";
-    const dados = snapshot.val();
-    if (!dados) return;
-
-    const agendamentos = Object.entries(dados)
-      .filter(([key, a]) => a.data === dataSelecionada)
-      .sort((a, b) => a[1].horario.localeCompare(b[1].horario));
-
-    if (agendamentos.length === 0) {
-      lista.innerHTML = "<p>Nenhum agendamento nesse dia.</p>";
-      return;
-    }
-
-    agendamentos.forEach(([key, a]) => {
-      lista.innerHTML += `
-        <div class="agendamento" id="ag-${key}">
-          <strong>${a.horario}</strong> - ${a.nome}<br>
-          📞 ${a.telefone}<br>
-          ✂ ${a.servico}<br>
-          <button onclick="deletarAgendamento('${key}')" style="margin-top:5px;background:#ff4d4d;color:white;border:none;padding:5px 8px;border-radius:4px;cursor:pointer;">Apagar</button>
-        </div>
-      `;
-    });
+    window.open(link, "_blank");
   });
-});
-
-window.deletarAgendamento = async function(key) {
-  if (!confirm("Deseja realmente apagar este agendamento?")) return;
-  try {
-    await remove(ref(database, "agendamentos/" + key));
-    const elem = document.getElementById("ag-" + key);
-    if (elem) elem.remove();
-    alert("Agendamento apagado com sucesso!");
-  } catch (err) {
-    alert("Erro ao apagar agendamento.");
-    console.error(err);
-  }
-};
 </script>
 
 </body>
 </html>
+
